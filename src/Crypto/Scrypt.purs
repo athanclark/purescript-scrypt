@@ -3,9 +3,12 @@ module Crypto.Scrypt
   ) where
 
 import Prelude
+import Data.Either (Either (..))
 import Data.ArrayBuffer.Types (Uint8Array)
+import Control.Monad.Aff (Aff, makeAff, nonCanceler)
 import Control.Monad.Eff (Eff, kind Effect)
 import Control.Monad.Eff.Uncurried (EffFn1, mkEffFn1, runEffFn1)
+import Control.Monad.Eff.Exception (error)
 
 
 
@@ -33,16 +36,14 @@ type ScryptParams eff =
   , r :: Int
   , p :: Int
   , dkLen :: Int
-  , onError :: String -> Eff (scrypt :: SCRYPT | eff) Unit
   , onProgress :: Number -> Eff (scrypt :: SCRYPT | eff) Unit
-  , onComplete :: Uint8Array -> Eff (scrypt :: SCRYPT | eff) Unit
   }
 
 
-scrypt :: forall eff. ScryptParams eff -> Eff (scrypt :: SCRYPT | eff) Unit
-scrypt {password,salt,n,r,p,dkLen,onError,onProgress,onComplete} = runEffFn1 scryptImpl
+scrypt :: forall eff. ScryptParams eff -> Aff (scrypt :: SCRYPT | eff) Uint8Array
+scrypt {password,salt,n,r,p,dkLen,onProgress} = makeAff \resolve -> nonCanceler <$ runEffFn1 scryptImpl
   { password, salt, n, r, p, dkLen
-  , onError: mkEffFn1 onError
+  , onError: mkEffFn1 (resolve <<< Left <<< error)
   , onProgress: mkEffFn1 onProgress
-  , onComplete: mkEffFn1 onComplete
+  , onComplete: mkEffFn1 (resolve <<< Right)
   }

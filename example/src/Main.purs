@@ -6,6 +6,8 @@ import Data.TextEncoder (encodeUtf8)
 import Prelude
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log, error)
+import Unsafe.Coerce (unsafeCoerce)
+
 
 main :: forall e. Eff (console :: CONSOLE, scrypt :: SCRYPT | e) Unit
 main = do
@@ -20,5 +22,5 @@ main = do
     , dkLen: 32
     , onError: error
     , onProgress: \p -> log $ "progress: " <> show p
-    , onComplete: \key -> log $ show key
+    , onComplete: \key -> log $ unsafeCoerce key
     }
