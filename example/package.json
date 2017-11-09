@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "scrypt-js": "^2.0.3"
+    "scrypt-js": "^2.0.3",
+    "text-encoding": "^0.6.4"
   }
 }
