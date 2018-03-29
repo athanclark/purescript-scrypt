@@ -36,11 +36,11 @@ type ScryptParams eff =
   , r :: Int
   , p :: Int
   , dkLen :: Int
-  , onProgress :: Number -> Eff (scrypt :: SCRYPT | eff) Unit
+  , onProgress :: Number -> Eff eff Unit
   }
 
 
-scrypt :: forall eff. ScryptParams eff -> Aff (scrypt :: SCRYPT | eff) Uint8Array
+scrypt :: forall eff. ScryptParams (scrypt :: SCRYPT | eff) -> Aff (scrypt :: SCRYPT | eff) Uint8Array
 scrypt {password,salt,n,r,p,dkLen,onProgress} = makeAff \resolve -> nonCanceler <$ runEffFn1 scryptImpl
   { password, salt, n, r, p, dkLen
   , onError: mkEffFn1 (resolve <<< Left <<< error)
