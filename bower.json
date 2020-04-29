@@ -9,16 +9,11 @@
   ],
   "license": "BSD-3-Clause",
   "dependencies": {
-    "purescript-prelude": "^4.1.0",
     "purescript-arraybuffer-types": "^2.0.0",
-    "purescript-exceptions": "^4.0.0",
     "purescript-aff": "^5.0.2"
   },
   "repository": {
-    "url": "git://github.com/athanclark/purescript-scrypt.git",
+    "url": "https://github.com/athanclark/purescript-scrypt.git",
     "type": "git"
-  },
-  "devDependencies": {
-    "purescript-psci-support": "^4.0.0"
   }
 }
